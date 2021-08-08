@@ -1,0 +1,20 @@
+canvas {
+    border: 2px solid gray;
+}
+
+h1 {
+    margin-bottom: 0px;
+    margin-top: 0px;
+}
+
+#resolution {
+    width: 800px;
+}
+
+#threshold {
+    width: 800px;
+}
+
+p {
+    margin: 0;
+}
