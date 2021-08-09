@@ -178,10 +178,6 @@ function scaleImageData(source, scale)
             const sA = source.data[ptr + 3];
 
             ptr = (x + y * res.width) * 4 * scale;
-            res.data[ptr] = 0xff;
-            res.data[ptr + 1] = 0x00;
-            res.data[ptr + 2] = 0xff;
-            res.data[ptr + 3] = 0xff;
 
             for (let sy = 0; sy < scale; sy++)
             {
