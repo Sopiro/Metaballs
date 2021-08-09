@@ -206,6 +206,7 @@ function dist(x0, y0, x1, y1)
     return Math.sqrt((x1 - x0) * (x1 - x0) + (y1 - y0) * (y1 - y0));
 }
 
+// https://axonflux.com/handy-rgb-to-hsl-and-rgb-to-hsv-color-model-c
 function HSVtoRGB(h, s, v)
 {
     var r, g, b, i, f, p, q, t;
