@@ -43,6 +43,8 @@ class Game
 
             this.width = this.canvasWidth / this.scale;
             this.height = this.canvasHeight / this.scale;
+            this.tmpCanvas.width = this.width;
+            this.tmpCanvas.height = this.height;
         });
 
         this.hueCheck.addEventListener("click", () =>
@@ -58,6 +60,11 @@ class Game
         this.threshold = 0.1;
         this.hsvMode = true;
         this.time = 0;
+
+        this.tmpCanvas = document.createElement("canvas");
+        this.tmpCanvas.width = this.width;
+        this.tmpCanvas.height = this.height;
+        this.tempCtx = this.tmpCanvas.getContext("2d");
     }
 
     start()
@@ -156,46 +163,51 @@ class Game
             }
         }
 
-        if (this.scale != 1)
-            pixels = scaleImageData(pixels, this.scale);
+        this.tempCtx.putImageData(pixels, 0, 0);
 
-        this.ctx.putImageData(pixels, 0, 0);
+        this.ctx.save();
+        this.ctx.imageSmoothingEnabled = false;
+        this.ctx.scale(this.scale, this.scale);
+        this.ctx.drawImage(this.tmpCanvas, 0, 0)
+        this.ctx.restore();
+
     }
 }
-function scaleImageData(source, scale)
-{
-    const res = new ImageData(source.width * scale, source.height * scale);
 
-    for (let y = 0; y < source.height; y++)
-    {
-        for (let x = 0; x < source.width; x++)
-        {
-            let ptr = (x + y * source.width) * 4;
+// function scaleImageData(source, scale)
+// {
+//     const res = new ImageData(source.width * scale, source.height * scale);
 
-            const sR = source.data[ptr];
-            const sG = source.data[ptr + 1];
-            const sB = source.data[ptr + 2];
-            const sA = source.data[ptr + 3];
+//     for (let y = 0; y < source.height; y++)
+//     {
+//         for (let x = 0; x < source.width; x++)
+//         {
+//             let ptr = (x + y * source.width) * 4;
 
-            ptr = (x + y * res.width) * 4 * scale;
+//             const sR = source.data[ptr];
+//             const sG = source.data[ptr + 1];
+//             const sB = source.data[ptr + 2];
+//             const sA = source.data[ptr + 3];
 
-            for (let sy = 0; sy < scale; sy++)
-            {
-                for (let sx = 0; sx < scale; sx++)
-                {
-                    ptr = (x + y * res.width) * 4 * scale + (sx + sy * res.width) * 4;
+//             ptr = (x + y * res.width) * 4 * scale;
 
-                    res.data[ptr] = sR;
-                    res.data[ptr + 1] = sG;
-                    res.data[ptr + 2] = sB;
-                    res.data[ptr + 3] = sA;
-                }
-            }
-        }
-    }
+//             for (let sy = 0; sy < scale; sy++)
+//             {
+//                 for (let sx = 0; sx < scale; sx++)
+//                 {
+//                     ptr = (x + y * res.width) * 4 * scale + (sx + sy * res.width) * 4;
 
-    return res;
-}
+//                     res.data[ptr] = sR;
+//                     res.data[ptr + 1] = sG;
+//                     res.data[ptr + 2] = sB;
+//                     res.data[ptr + 3] = sA;
+//                 }
+//             }
+//         }
+//     }
+
+//     return res;
+// }
 
 function dist(x0, y0, x1, y1)
 {
